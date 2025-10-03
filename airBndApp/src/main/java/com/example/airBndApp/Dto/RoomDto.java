@@ -5,8 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -14,6 +13,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class RoomDto {
     private Long id;
 
@@ -27,5 +30,5 @@ public class RoomDto {
 
     private Integer totalCount;
     private  Integer capacity;
-    private HotelEntity hotel;
+
 }
