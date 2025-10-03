@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -41,14 +42,14 @@ public class HotelServiceimpl implements HotelService{
         log.info("find hotel by id : {}",id);
         HotelEntity hotel = hotelRepo.findById(id).orElseThrow(() -> new ResourcesNotFoundException("this hotel id "+id+" are not found"));
         hotel = modelMapper.map(hotelDto,HotelEntity.class);
-        log.info("update value of this hotel id : {} ",id+" info : {} ", hotel);
+        log.info("update value of this hotel id : {} info : {} ",id,hotel);
         hotel.setId(id);
         return modelMapper.map(hotelRepo.save(hotel), HotelDto.class);
 
     }
 
     @Override
-    public Boolean deleteHotelById(Long id) {
+    public void deleteHotelById(Long id) {
         Boolean isExist = hotelRepo.existsById(id);
 
     if(!isExist)  throw new ResourcesNotFoundException("for delete Hotel id is not found : {}"+id);
@@ -58,6 +59,15 @@ public class HotelServiceimpl implements HotelService{
     hotelRepo.deleteById(id);
 
     //TODO : DELETE FUTURE INVENTERY DATA TO FOR THIS INVENTERY.
-        return isExist;
+
+    }
+
+    @Override
+    public void activeHotel(Long id) {
+        HotelEntity hotel = hotelRepo.findById(id).orElseThrow(() -> new ResourcesNotFoundException("this hotel id "+id+" are not found"));
+        hotel.setActive(true);
+
+//        TODO : CREATE INVENTORY FOR ALL THE ROOM FOR THIS HOTEL
+
     }
 }

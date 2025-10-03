@@ -45,6 +45,9 @@ public class HotelEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity owner;
 
+    @OneToMany(mappedBy = "hotel")
+    private List<RoomEntity> rooms;
+
 
 
 }
