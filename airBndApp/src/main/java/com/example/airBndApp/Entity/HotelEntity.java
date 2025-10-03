@@ -42,6 +42,9 @@ public class HotelEntity {
     @UpdateTimestamp
     private LocalDateTime updateAt;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserEntity owner;
+
 
 
 }
