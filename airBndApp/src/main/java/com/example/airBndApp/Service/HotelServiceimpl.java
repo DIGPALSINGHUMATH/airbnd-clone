@@ -2,8 +2,10 @@ package com.example.airBndApp.Service;
 
 import com.example.airBndApp.Dto.HotelDto;
 import com.example.airBndApp.Entity.HotelEntity;
+import com.example.airBndApp.Entity.RoomEntity;
 import com.example.airBndApp.Repository.HotelRepo;
 import com.example.airBndApp.exception.ResourcesNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -17,6 +19,7 @@ public class HotelServiceimpl implements HotelService{
 
     private final HotelRepo hotelRepo;
     private final ModelMapper modelMapper;
+    private final InventoryService inventoryService;
 
 
     @Override
@@ -49,25 +52,28 @@ public class HotelServiceimpl implements HotelService{
     }
 
     @Override
+    @Transactional
     public void deleteHotelById(Long id) {
-        Boolean isExist = hotelRepo.existsById(id);
+        HotelEntity hotel = hotelRepo.findById(id).orElseThrow(() -> new ResourcesNotFoundException("this hotel id "+id+" are not found"));
 
-    if(!isExist)  throw new ResourcesNotFoundException("for delete Hotel id is not found : {}"+id);
-
-    log.info("start delete hotel on this  id {} ", id);
+        log.info("start delete hotel on this  id {} ", id);
 
     hotelRepo.deleteById(id);
-
-    //TODO : DELETE FUTURE INVENTERY DATA TO FOR THIS INVENTERY.
+        for(RoomEntity room : hotel.getRooms()){
+            inventoryService.deleteFutureInventory(room);
+        }
 
     }
 
     @Override
+    @Transactional
     public void activeHotel(Long id) {
         HotelEntity hotel = hotelRepo.findById(id).orElseThrow(() -> new ResourcesNotFoundException("this hotel id "+id+" are not found"));
         hotel.setActive(true);
 
-//        TODO : CREATE INVENTORY FOR ALL THE ROOM FOR THIS HOTEL
+        for(RoomEntity room: hotel.getRooms() ){
+            inventoryService.initializeRoomAYear(room);
+        }
 
     }
 }

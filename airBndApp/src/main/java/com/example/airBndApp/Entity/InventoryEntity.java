@@ -2,8 +2,7 @@ package com.example.airBndApp.Entity;
 
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -20,6 +19,9 @@ uniqueConstraints = @UniqueConstraint(
         name = "unique_hotel_room_date",
         columnNames = {"hotel_id","room_id","date"}
 ))
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class InventoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +38,9 @@ public class InventoryEntity {
 
     @Column(nullable = false)
     private String city;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal price;
 
     @CreationTimestamp
     private LocalDateTime createAt;

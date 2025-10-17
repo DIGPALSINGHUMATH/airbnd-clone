@@ -6,6 +6,7 @@ import com.example.airBndApp.Entity.RoomEntity;
 import com.example.airBndApp.Repository.HotelRepo;
 import com.example.airBndApp.Repository.RoomRepo;
 import com.example.airBndApp.exception.ResourcesNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -22,6 +23,7 @@ public class RoomServiceimpl implements RoomService {
     private final HotelRepo hotelRepo;
     private final RoomRepo roomRepo;
     private final ModelMapper modelMapper;
+    private final InventoryService inventoryService;
 
 
     private Boolean isRoomIdExit(Long id){
@@ -43,7 +45,9 @@ public class RoomServiceimpl implements RoomService {
         roomEntity = roomRepo.save(roomEntity);
         log.info("room created");
 
-//        TODO : CREATE ROOM AFTER THAT CRETE INVENTORY AS SOON IF HOTEL ACTIVE
+        if(hotel.getActive()){
+            inventoryService.initializeRoomAYear(roomEntity);
+        }
 
         return modelMapper.map(roomEntity , RoomDto.class);
 
@@ -66,14 +70,12 @@ public class RoomServiceimpl implements RoomService {
 
 
     @Override
+    @Transactional
     public void deleteRoomById(Long id) {
-        Boolean isExist= roomRepo.existsById(id);
-        if(!isExist){
-            throw new ResourcesNotFoundException("room id not Found : "+ id);
-        }
+        RoomEntity room = roomRepo.findById(id).orElseThrow(() -> new ResourcesNotFoundException("room id not Found : "+ id));
+        log.info("inventory delete : start");
+        inventoryService.deleteFutureInventory(room);
+        log.info("room deleted now ");
         roomRepo.deleteById(id);
-
-//        TODO : DELETE ALL FUTURE INVENTORY
-
     }
 }

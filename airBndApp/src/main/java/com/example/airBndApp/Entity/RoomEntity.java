@@ -19,7 +19,7 @@ public class RoomEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String Type;
+    private String type;
 
     @Column(precision = 10, scale = 2, nullable = false)
     private BigDecimal basePrice;
