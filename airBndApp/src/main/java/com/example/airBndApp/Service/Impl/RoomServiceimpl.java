@@ -1,10 +1,12 @@
-package com.example.airBndApp.Service;
+package com.example.airBndApp.Service.Impl;
 
 import com.example.airBndApp.Dto.RoomDto;
 import com.example.airBndApp.Entity.HotelEntity;
 import com.example.airBndApp.Entity.RoomEntity;
 import com.example.airBndApp.Repository.HotelRepo;
 import com.example.airBndApp.Repository.RoomRepo;
+import com.example.airBndApp.Service.InventoryService;
+import com.example.airBndApp.Service.RoomService;
 import com.example.airBndApp.exception.ResourcesNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +28,7 @@ public class RoomServiceimpl implements RoomService {
     private final InventoryService inventoryService;
 
 
-    private Boolean isRoomIdExit(Long id){
+    private Boolean isRoomIdExit(Long id){ // check it room is exit in inventory or not
         Boolean isRoomIdExit = roomRepo.existsById(id);
         if(!isRoomIdExit) throw  new ResourcesNotFoundException("Room are not exist this id : " + id);
         return true;
@@ -34,7 +36,7 @@ public class RoomServiceimpl implements RoomService {
 
 
     @Override
-    public RoomDto createNewRoom(Long hotelId,RoomDto roomDto) {
+    public RoomDto createNewRoom(Long hotelId,RoomDto roomDto) {//create a room with details
         log.info("start find hotel");
         HotelEntity hotel = hotelRepo.findById(hotelId).orElseThrow(() -> new ResourcesNotFoundException("Hotel id not Found : "+ hotelId));
 
@@ -45,6 +47,7 @@ public class RoomServiceimpl implements RoomService {
         roomEntity = roomRepo.save(roomEntity);
         log.info("room created");
 
+//        if hotel active then create room in inventory to avaliblity to user
         if(hotel.getActive()){
             inventoryService.initializeRoomAYear(roomEntity);
         }
@@ -54,7 +57,7 @@ public class RoomServiceimpl implements RoomService {
     }
 
     @Override
-    public RoomDto getRoomById( Long id) {
+    public RoomDto getRoomById( Long id) { //room find by id
 
         RoomEntity room = roomRepo.findById(id).orElseThrow(() -> new ResourcesNotFoundException("room id not Found : "+ id));
         return modelMapper.map(room,RoomDto.class);
@@ -62,7 +65,7 @@ public class RoomServiceimpl implements RoomService {
     }
 
     @Override
-    public List<RoomDto> getAllRoomByHotelId(Long hotelId) {
+    public List<RoomDto> getAllRoomByHotelId(Long hotelId) { // get all room on hotal using id
         HotelEntity hotel = hotelRepo.findById(hotelId).orElseThrow(() -> new ResourcesNotFoundException("Hotel id not Found : "+ hotelId));
 
         return hotel.getRooms().stream().map(element ->modelMapper.map(element , RoomDto.class)).collect(Collectors.toList());
@@ -71,10 +74,10 @@ public class RoomServiceimpl implements RoomService {
 
     @Override
     @Transactional
-    public void deleteRoomById(Long id) {
+    public void deleteRoomById(Long id) { // delete hotel using id
         RoomEntity room = roomRepo.findById(id).orElseThrow(() -> new ResourcesNotFoundException("room id not Found : "+ id));
         log.info("inventory delete : start");
-        inventoryService.deleteFutureInventory(room);
+        inventoryService.deleteAllInventory(room);
         log.info("room deleted now ");
         roomRepo.deleteById(id);
     }

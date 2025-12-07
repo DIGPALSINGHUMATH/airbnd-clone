@@ -1,7 +1,6 @@
 package com.example.airBndApp;
 
-import com.example.airBndApp.Dto.RoomDto;
-import com.example.airBndApp.Service.RoomServiceimpl;
+import com.example.airBndApp.Service.Impl.RoomServiceimpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
