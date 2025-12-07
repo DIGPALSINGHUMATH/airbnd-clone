@@ -1,6 +1,7 @@
 package com.example.airBndApp.Service;
 
 import com.example.airBndApp.Dto.HotelDto;
+import com.example.airBndApp.Dto.HotelInfoDto;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,4 +16,6 @@ public interface HotelService {
     void deleteHotelById(Long id);
 
     void activeHotel(Long id);
+
+    HotelInfoDto getHotelInfo(Long hotelId);
 }

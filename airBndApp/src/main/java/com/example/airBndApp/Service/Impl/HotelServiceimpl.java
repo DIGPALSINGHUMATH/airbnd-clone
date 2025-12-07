@@ -1,6 +1,8 @@
 package com.example.airBndApp.Service.Impl;
 
 import com.example.airBndApp.Dto.HotelDto;
+import com.example.airBndApp.Dto.HotelInfoDto;
+import com.example.airBndApp.Dto.RoomDto;
 import com.example.airBndApp.Entity.HotelEntity;
 import com.example.airBndApp.Entity.RoomEntity;
 import com.example.airBndApp.Repository.HotelRepo;
@@ -13,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
@@ -85,5 +89,15 @@ public class HotelServiceimpl implements HotelService {
             inventoryService.initializeRoomAYear(room);
         }
 
+    }
+
+    @Override
+    public HotelInfoDto getHotelInfo(Long hotelId) {
+        HotelEntity hotel = hotelRepo.findById(hotelId).orElseThrow(()-> new ResourcesNotFoundException("Not able found hotel id :" + hotelId));
+
+        List<RoomDto> room  = hotel.getRooms().stream().map(element -> modelMapper.map(element,RoomDto.class)).toList();
+
+
+        return new HotelInfoDto(modelMapper.map(hotel,HotelDto.class),room);
     }
 }

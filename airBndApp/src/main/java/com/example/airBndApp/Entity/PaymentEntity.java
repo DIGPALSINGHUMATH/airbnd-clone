@@ -34,4 +34,7 @@ public class PaymentEntity {
 
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private BookingEntity Booking;
 }
