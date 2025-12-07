@@ -50,9 +50,7 @@ public class BookingEntity {
     @JoinColumn(name = "user_id" , nullable = false)
     private UserEntity user;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "payment_id")
-    private PaymentEntity payment;
+
 
     @ManyToMany
     @JoinTable(
