@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
 //        return new ResponseEntity<>("Resource not Found" ,HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(Exception.class)
+//    @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponce<?>> errorHandle(Exception exception){
         ApiError apiError = ApiError.builder()
                 .status(HttpStatus.NOT_FOUND)

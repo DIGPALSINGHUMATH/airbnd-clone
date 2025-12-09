@@ -1,7 +1,6 @@
 package com.example.airBndApp.Entity;
 
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -9,7 +8,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -32,6 +30,10 @@ public class InventoryEntity {
 
     @Column(nullable = false,columnDefinition = "INTEGER DEFAULT 0")
     private Integer bookingCount;
+
+    @Column(nullable = false,columnDefinition = "INTEGER DEFAULT 0")
+    private Integer reservedCount = 0;
+
 
     @Column(nullable = false)
     private Integer totalCount;

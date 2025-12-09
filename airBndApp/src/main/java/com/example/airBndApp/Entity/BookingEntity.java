@@ -2,11 +2,11 @@ package com.example.airBndApp.Entity;
 
 import com.example.airBndApp.Entity.Enum.BookingStatus;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,6 +16,9 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "booking_id")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class BookingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +40,9 @@ public class BookingEntity {
 
     @Column(nullable = false)
     private Integer roomCount;
+
+    @Column(nullable = false, precision = 5,scale = 2)
+    private BigDecimal amount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hotel_id",nullable = false)
