@@ -23,8 +23,8 @@ public class PaymentEntity {
     @Column(nullable = false)
     private String TransactionId;
 
-    @Column(precision = 5,scale = 2)
-    private BigDecimal price;
+    @Column(nullable = false, precision = 5,scale = 2)
+    private BigDecimal amount;
 
     @CreationTimestamp
     private LocalDateTime createAt;

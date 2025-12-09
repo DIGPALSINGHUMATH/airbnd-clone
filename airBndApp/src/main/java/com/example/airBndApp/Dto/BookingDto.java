@@ -20,9 +20,7 @@ public class BookingDto {
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
     private Integer roomCount;
-    private HotelDto hotel;
-    private RoomDto Room;
-    private UserDto user;
+//    private UserDto user;
     private Set<GuestDto> guests;
 
 }

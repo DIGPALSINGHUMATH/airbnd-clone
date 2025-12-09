@@ -35,4 +35,5 @@ public class HotelBrowseController {
         return ResponseEntity.ok(hotelService.getHotelInfo(hotelId));
     }
 
+
 }
