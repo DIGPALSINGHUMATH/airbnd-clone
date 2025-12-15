@@ -2,7 +2,9 @@ package com.example.airBndApp.Controller;
 
 import com.example.airBndApp.Dto.HotelDto;
 import com.example.airBndApp.Dto.HotelInfoDto;
+import com.example.airBndApp.Dto.HotelPriceDto;
 import com.example.airBndApp.Dto.HotelSearchRequest;
+import com.example.airBndApp.Entity.HotelMinPriceEntity;
 import com.example.airBndApp.Service.HotelService;
 import com.example.airBndApp.Service.InventoryService;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +25,9 @@ public class HotelBrowseController {
     public  final HotelService hotelService;
 
     @GetMapping("/search")
-    public ResponseEntity<Page<HotelDto>> hotelBrowse(@RequestBody HotelSearchRequest hotelSearchRequest){
+    public ResponseEntity<Page<HotelPriceDto>> hotelBrowse(@RequestBody HotelSearchRequest hotelSearchRequest){
 
-        Page<HotelDto> hotelDtoPage = inventoryService.searchHotels(hotelSearchRequest);
+        var hotelDtoPage = inventoryService.searchHotels(hotelSearchRequest);
         return ResponseEntity.ok(hotelDtoPage);
 
     }

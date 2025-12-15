@@ -1,5 +1,6 @@
 package com.example.airBndApp.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -46,6 +47,7 @@ public class HotelEntity {
     private UserEntity owner;
 
     @OneToMany(mappedBy = "hotel")
+    @JsonIgnore
     private List<RoomEntity> rooms;
 
 
