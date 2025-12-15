@@ -54,5 +54,5 @@ public interface InventoryRepo extends JpaRepository<InventoryEntity,Long> {
     );
 
 
-
+    List<InventoryEntity> findByHotelAndDateBetween(HotelEntity hotel, LocalDate startDate, LocalDate endDate);
 }
