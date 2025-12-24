@@ -8,9 +8,11 @@ import com.example.airBndApp.Entity.Enum.BookingStatus;
 import com.example.airBndApp.Repository.*;
 import com.example.airBndApp.Service.BookingService;
 import com.example.airBndApp.exception.ResourcesNotFoundException;
+import com.example.airBndApp.exception.UnAuthorisedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,9 +97,14 @@ public class BookingServiceImpl implements BookingService {
             throw new IllegalStateException("Booking hasn't reserved ");
         }
 
+        UserEntity user = getCurrentUser();
+        if(user.equals(booking.getUser())){
+            throw new UnAuthorisedException("Booking does not belong to this user with this id : "+ user.getId());
+        }
+
         for(GuestDto guestDto : guests){
             GuestEntity guest = modelMapper.map(guestDto , GuestEntity.class);
-            guest.setUser(getCurrentUser());
+            guest.setUser(user);
             guest = guestRepository.save(guest);
             booking.getGuests().add(guest);
 
@@ -115,9 +122,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     public UserEntity getCurrentUser(){
-        UserEntity user = new UserEntity();
-        user.setId(1L); // TODO: REMMOVE DUMMY USER
-        return user;
+        return (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
 }
