@@ -1,4 +1,4 @@
-# airbnd-clone
+
 Project Overview:
 This project involves two types of users: hotel manager and User. The hotel manager can create rooms or hotels, while Users can only book rooms.
 
